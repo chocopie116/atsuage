@@ -1,30 +1,47 @@
 package slack
-//
-//type Bot interface {
-//	Parse() (BotResponse, error)
-//}
-//
-//func NewBot(commands [] BotCmd){
-//	//TODO Botのcmdを引数で受け取るようにする
-//	return SlackBotImpl{commands}
-//}
-//
-//type BotImpl struct {
-//	//TODO
-//	commands [] BotCmd
-//}
-//
-//type BotResponse struct {
-//}
-//
-//type BotCmd interface {
-//	//TODO messageを受ける
-//	match()(bool, error)
-//	//TODO messageを受ける
-//	action()(BotResponse, error)
-//}
-//
-////TODO messageを受け取ってResponseを返す
-//func (b SlackBotImpl) Parse() (BotResponse, error){
-//	return BotResponse{}, nil
-//}
+
+import "fmt"
+
+type Bot interface {
+	Parse(ChatMessage) (BotResponse, error)
+}
+
+func NewBot(commands [] BotCmd) Bot{
+	return BotImpl{commands}
+}
+
+type BotImpl struct {
+	commands [] BotCmd
+}
+
+type BotResponse struct {
+	Text string
+}
+
+type BotCmd interface {
+	Match(ChatMessage)(bool, error)
+	Action(ChatMessage)(BotResponse, error)
+}
+
+func (b BotImpl) Parse(m ChatMessage) (BotResponse, error){
+	var r BotResponse
+	for _, c := range b.commands {
+		matched, err := c.Match(ChatMessage{})
+		if err != nil {
+			return r, err
+		}
+
+		if matched == false{
+			continue
+		}
+
+		r, err := c.Action(m)
+		if err != nil {
+			return r, err
+		}
+
+		return r, nil
+	}
+
+	return r,fmt.Errorf("Nothing BodCmd matched. plz check injected BotCmd")
+}
