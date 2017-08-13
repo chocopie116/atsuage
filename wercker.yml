@@ -3,5 +3,8 @@ box: golang
 build:
   steps:
     - script:
-    name: test
-    code: make test
+      name: echo golang information
+      code: go version
+    - script:
+      name: test
+      code: make test
