@@ -7,11 +7,17 @@ import (
 )
 
 type message struct {
-	Hello string `json:"hello"`
+	Value string `json:"message"`
 }
 
 func main() {
 	apex.HandleFunc(func(event json.RawMessage, ctx *apex.Context) (interface{}, error) {
-		return map[string]string{"hello": "wai"}, nil
+		var m message
+
+		if err := json.Unmarshal(event, &m); err != nil {
+			return nil, err
+		}
+
+		return m, nil
 	})
 }
