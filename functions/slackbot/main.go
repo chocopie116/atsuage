@@ -20,15 +20,14 @@ type slackChatMessage struct {
 }
 
 func main() {
-	log.Printf("%s\n", "test")
 	apex.HandleFunc(func(event json.RawMessage, ctx *apex.Context) (interface{}, error) {
-		log.Printf("%s\n", event)
-
 		var m slackChatMessage
+
+		log.Printf("original %s\n", event)
 		if err := json.Unmarshal(event, &m); err != nil {
 			return nil, err
 		}
-		log.Printf("%s\n", m)
+		//log.Printf("%s\n", m)
 
 		return map[string]string{"text": m.Text}, nil
 	})
