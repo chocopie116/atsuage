@@ -3,6 +3,12 @@ box: golang:1.8
 build:
   steps:
     - script:
+      name: force gopath to use dep
+      code: |
+          mkdir -p /tmp
+          mv -f /pipeline/source /tmp
+          ls /tmp
+    - script:
       name: echo golang information
       code: go version
     - script:
