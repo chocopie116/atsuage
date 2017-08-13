@@ -6,5 +6,8 @@ build:
       name: echo golang information
       code: go version
     - script:
+      name: install packages
+      code: make install
+    - script:
       name: test
       code: make test
