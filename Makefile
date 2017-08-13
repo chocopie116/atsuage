@@ -15,3 +15,6 @@ deploy:
 
 logs:
 	$(APEX) logs $(target)
+
+metrics:
+	$(APEX) metrics $(target)
