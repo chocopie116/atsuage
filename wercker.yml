@@ -4,7 +4,7 @@ build:
   steps:
     - script:
       name: echo golang information
-      code: go version && ls /pipeline/source && ls /go
+      code: go version && ls /pipeline/source && ls /go/bin
     - script:
       name: install packages
       code: make install
