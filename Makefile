@@ -12,3 +12,6 @@ list/function:
 
 deploy:
 	$(APEX) deploy $(target)
+
+logs:
+	$(APEX) logs $(target)
