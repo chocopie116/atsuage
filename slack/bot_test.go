@@ -15,7 +15,7 @@ func (t TestCmd) Action (message ChatMessage) (BotResponse, error) {
 	return BotResponse{Text: "TestCmd Response text is here"}, nil
 }
 
-func TestNewBot(t *testing.T) {
+func TestNewBot_OK(t *testing.T) {
 	commands := []BotCmd{&TestCmd{}}
 	b:= NewBot(commands)
 
@@ -34,11 +34,11 @@ func TestNewBot(t *testing.T) {
 	r, err := b.Parse(m)
 
 	if err != nil {
-		t.Fatal("majide")
+		t.Errorf("want nil but got %+v", err)
 	}
 
 	if r.Text != "TestCmd Response text is here" {
-		t.Fatal("BodResponse.Text is wrong")
+		t.Errorf("BotResponse.Text is wrong. got BotResponse is %+v", r)
 	}
 }
 
@@ -73,6 +73,6 @@ func TestNewBot_nothing_matched(t *testing.T) {
 	_, err := b.Parse(m)
 
 	if err == nil {
-		t.Fatal("must return err because NotFoundTestCmd is never matched")
+		t.Error("must return err but got nil")
 	}
 }
