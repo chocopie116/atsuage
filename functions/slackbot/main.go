@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 )
 
-type message struct {
+type SlackChatMessage struct {
 	Token string `json:"token"`
 	TeamId string `json:"team_id"`
 	TeamDomain string `json:"team_domain"`
@@ -20,8 +20,11 @@ type message struct {
 }
 
 func main() {
+	log.Printf("%s\n", "test")
 	apex.HandleFunc(func(event json.RawMessage, ctx *apex.Context) (interface{}, error) {
-		var m message
+		log.Printf("%s\n", event)
+
+		var m SlackChatMessage
 		if err := json.Unmarshal(event, &m); err != nil {
 			return nil, err
 		}
