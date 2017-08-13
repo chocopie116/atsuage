@@ -18,3 +18,7 @@ logs:
 
 metrics:
 	$(APEX) metrics $(target)
+
+run:
+	$(APEX) invoke $(target) < params.json
+
