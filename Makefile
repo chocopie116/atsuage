@@ -1,5 +1,5 @@
 APEX=$(shell which apex)
-target=hello
+target=slackbot
 
 setup:
 	cp .env.sample .env
@@ -22,3 +22,5 @@ metrics:
 run:
 	$(APEX) invoke $(target) < params.json
 
+run/local:
+	cat params.json | go run functions/slackbot/main.go
