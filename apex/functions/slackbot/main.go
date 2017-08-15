@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"encoding/json"
+	"strings"
 
 	"github.com/apex/go-apex"
 	"github.com/chocopie116/atsuage/bot"
@@ -51,7 +52,7 @@ func main() {
 }
 
 func initialize() bot.Bot {
-	commands := []bot.BotCmd{&bot.DefaultCmd{}}
+	commands := []bot.BotCmd{bot.DefaultCmd{}}
 
 	return bot.NewBot(commands)
 }
@@ -59,12 +60,19 @@ func initialize() bot.Bot {
 func factoryBotStatement(event json.RawMessage) (bot.BotStatement, error) {
 	var m slackMessage
 	var st bot.BotStatement
+	var t string
 
 	if err := json.Unmarshal(event, &m); err != nil {
 		return st, err
 	}
 
-	return bot.BotStatement{Text: m.Text}, nil
+	if m.TriggerWord != "" {
+		t = strings.Replace(m.Text, m.TriggerWord, "", 1)
+	} else {
+		t = m.Text
+	}
+
+	return bot.BotStatement{Text: t}, nil
 }
 
 func convertSlackResponse(br bot.BotResponse) (slackResponse, error) {
