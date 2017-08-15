@@ -11,7 +11,7 @@ list/function:
 	$(APEX) list
 
 deploy:
-	$(APEX) deploy $(target)
+	source .env && $(APEX) deploy $(target)
 
 logs:
 	$(APEX) logs $(target)
