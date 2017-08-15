@@ -12,4 +12,3 @@ type ChatMessage struct {
 	Text string `json:"text"`
 	TriggerWord string `json:"trigger_word"`
 }
-
