@@ -8,5 +8,5 @@ func (d DefaultCmd) Match(st BotStatement) (bool, error){
 }
 
 func (d DefaultCmd) Action(st BotStatement) (BotResponse, error) {
-	return BotResponse{Text: "なんや"}, nil
+	return BotResponse{Text: "why"}, nil
 }

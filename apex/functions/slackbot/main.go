@@ -1,10 +1,12 @@
 package main
 
 import (
-	"github.com/apex/go-apex"
 	"log"
 	"encoding/json"
+
+	"github.com/apex/go-apex"
 	"github.com/chocopie116/atsuage/slack"
+	"github.com/chocopie116/atsuage/bot"
 )
 
 func main() {
@@ -15,8 +17,23 @@ func main() {
 		if err := json.Unmarshal(event, &m); err != nil {
 			return nil, err
 		}
-		//log.Printf("%s\n", m)
 
-		return map[string]string{"text": m.Text}, nil
+		b := initialize()
+
+		rs, err := b.Parse(m)
+
+		if err != nil {
+			return nil, err
+		}
+
+		//log.Printf("%+v", rs)
+
+		return map[string]string{"text": rs.Text}, nil
 	})
+}
+
+func initialize() bot.Bot {
+	commands := []bot.BotCmd{&bot.DefaultCmd{}}
+
+	return bot.NewBot(commands)
 }
