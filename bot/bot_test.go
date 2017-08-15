@@ -2,6 +2,7 @@ package bot
 
 import (
 	"testing"
+
 	"github.com/chocopie116/atsuage/slack"
 )
 
@@ -77,3 +78,4 @@ func TestNewBot_nothing_matched(t *testing.T) {
 		t.Error("must return err but got nil")
 	}
 }
+

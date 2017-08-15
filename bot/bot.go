@@ -33,7 +33,7 @@ type BotCmd interface {
 
 func (b BotImpl) Parse(m slack.ChatMessage) (BotResponse, error){
 	var r BotResponse
-	st := b.createStatement(m)
+	st := createStatement(m)
 	for _, c := range b.commands {
 		matched, err := c.Match(st)
 		if err != nil {
@@ -55,6 +55,6 @@ func (b BotImpl) Parse(m slack.ChatMessage) (BotResponse, error){
 	return r,fmt.Errorf("Nothing BodCmd matched. plz check injected BotCmd")
 }
 
-func (b BotImpl) createStatement(m slack.ChatMessage) BotStatement {
+func createStatement(m slack.ChatMessage) BotStatement {
 	return BotStatement{Text: m.Text}
 }
