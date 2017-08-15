@@ -8,7 +8,7 @@ import (
 	"github.com/chocopie116/atsuage/bot"
 )
 
-type chatMessage struct {
+type slackMessage struct {
 	Token string `json:"token"`
 	TeamId string `json:"team_id"`
 	TeamDomain string `json:"team_domain"`
@@ -21,23 +21,32 @@ type chatMessage struct {
 	TriggerWord string `json:"trigger_word"`
 }
 
+type slackResponse struct {
+	Text string `json:"text"`
+}
+
 func main() {
 	apex.HandleFunc(func(event json.RawMessage, ctx *apex.Context) (interface{}, error) {
 		log.Printf("original %s\n", event)
 
 		st, err := factoryBotStatement(event)
-
-		b := initialize()
-
-		rs, err := b.Parse(st)
-
 		if err != nil {
 			return nil, err
 		}
 
-		//log.Printf("%+v", rs)
+		b := initialize()
+		br, err := b.Parse(st)
+		if err != nil {
+			return nil, err
+		}
 
-		return map[string]string{"text": rs.Text}, nil
+		rs, err := convertSlackResponse(br)
+		if err != nil {
+			return rs, err
+		}
+		log.Printf("response %+v\n", rs)
+
+		return rs, nil
 	})
 }
 
@@ -48,7 +57,7 @@ func initialize() bot.Bot {
 }
 
 func factoryBotStatement(event json.RawMessage) (bot.BotStatement, error) {
-	var m chatMessage
+	var m slackMessage
 	var st bot.BotStatement
 
 	if err := json.Unmarshal(event, &m); err != nil {
@@ -56,4 +65,8 @@ func factoryBotStatement(event json.RawMessage) (bot.BotStatement, error) {
 	}
 
 	return bot.BotStatement{Text: m.Text}, nil
+}
+
+func convertSlackResponse(br bot.BotResponse) (slackResponse, error) {
+	return slackResponse{Text: br.Text}, nil
 }
