@@ -18,6 +18,6 @@ type BotStatement struct {
 	Text string
 }
 
-func (m ChatMessage) createStatement() BotStatement {
+func (m ChatMessage) createBotStatement() BotStatement {
 	return BotStatement{Text: m.Text}
 }

@@ -17,7 +17,7 @@ func TestCreateBotStatement_withoutTriggerWord(t *testing.T) {
 		Text: "somekeyword atsuage",
 		TriggerWord: "somekeyword",
 	}
-	s := m.createStatement()
+	s := m.createBotStatement()
 
 	if s.Text != "somekeyword atsuage" {
 		t.Errorf("want astuage but %+v", s)
