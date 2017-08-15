@@ -6,9 +6,10 @@ import (
 
 	"github.com/apex/go-apex"
 	"github.com/chocopie116/atsuage/bot"
+	"bytes"
 )
 
-type chatMessage struct {
+type slackMessage struct {
 	Token string `json:"token"`
 	TeamId string `json:"team_id"`
 	TeamDomain string `json:"team_domain"`
@@ -21,6 +22,10 @@ type chatMessage struct {
 	TriggerWord string `json:"trigger_word"`
 }
 
+type slackResponse struct {
+	Text string `json:"text`
+}
+
 func main() {
 	apex.HandleFunc(func(event json.RawMessage, ctx *apex.Context) (interface{}, error) {
 		log.Printf("original %s\n", event)
@@ -29,15 +34,21 @@ func main() {
 
 		b := initialize()
 
-		rs, err := b.Parse(st)
+		br, err := b.Parse(st)
 
 		if err != nil {
 			return nil, err
 		}
 
 		//log.Printf("%+v", rs)
+		rs, err := formatSlackResponse(br)
+		if err != nil {
+			return rs, err
+		}
 
-		return map[string]string{"text": rs.Text}, nil
+		log.Printf("response %s\n", rs)
+
+		return rs, nil
 	})
 }
 
@@ -48,7 +59,7 @@ func initialize() bot.Bot {
 }
 
 func factoryBotStatement(event json.RawMessage) (bot.BotStatement, error) {
-	var m chatMessage
+	var m slackMessage
 	var st bot.BotStatement
 
 	if err := json.Unmarshal(event, &m); err != nil {
@@ -56,4 +67,17 @@ func factoryBotStatement(event json.RawMessage) (bot.BotStatement, error) {
 	}
 
 	return bot.BotStatement{Text: m.Text}, nil
+}
+
+func formatSlackResponse(br bot.BotResponse) (string, error) {
+	sr := slackResponse{Text: br.Text}
+
+	var buf bytes.Buffer
+	b, err := json.Marshal(sr)
+	if err != nil {
+		return "", err
+	}
+	buf.Write(b)
+
+	return buf.String(), nil
 }
