@@ -1,9 +1,12 @@
-package slack
+package bot
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/chocopie116/atsuage/slack"
+)
 
 type Bot interface {
-	Parse(ChatMessage) (BotResponse, error)
+	Parse(slack.ChatMessage) (BotResponse, error)
 }
 
 func NewBot(commands [] BotCmd) Bot{
@@ -19,14 +22,14 @@ type BotResponse struct {
 }
 
 type BotCmd interface {
-	Match(ChatMessage)(bool, error)
-	Action(ChatMessage)(BotResponse, error)
+	Match(slack.ChatMessage)(bool, error)
+	Action(slack.ChatMessage)(BotResponse, error)
 }
 
-func (b BotImpl) Parse(m ChatMessage) (BotResponse, error){
+func (b BotImpl) Parse(m slack.ChatMessage) (BotResponse, error){
 	var r BotResponse
 	for _, c := range b.commands {
-		matched, err := c.Match(ChatMessage{})
+		matched, err := c.Match(slack.ChatMessage{})
 		if err != nil {
 			return r, err
 		}

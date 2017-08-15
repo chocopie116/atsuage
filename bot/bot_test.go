@@ -1,17 +1,18 @@
-package slack
+package bot
 
 import (
 	"testing"
+	"github.com/chocopie116/atsuage/slack"
 )
 
 type TestCmd struct {
 }
 
-func (t TestCmd) Match (message ChatMessage) (bool, error){
+func (t TestCmd) Match (message slack.ChatMessage) (bool, error){
 	return true, nil
 }
 
-func (t TestCmd) Action (message ChatMessage) (BotResponse, error) {
+func (t TestCmd) Action (message slack.ChatMessage) (BotResponse, error) {
 	return BotResponse{Text: "TestCmd Response text is here"}, nil
 }
 
@@ -19,7 +20,7 @@ func TestNewBot_OK(t *testing.T) {
 	commands := []BotCmd{&TestCmd{}}
 	b:= NewBot(commands)
 
-	m := ChatMessage{
+	m := slack.ChatMessage{
 		Token: "sometoken",
 		TeamId: "1234",
 		TeamDomain: "test",
@@ -45,11 +46,11 @@ func TestNewBot_OK(t *testing.T) {
 type NotFoundTestCmd struct {
 }
 
-func (t NotFoundTestCmd) Match (message ChatMessage) (bool, error){
+func (t NotFoundTestCmd) Match (message slack.ChatMessage) (bool, error){
 	return false, nil
 }
 
-func (t NotFoundTestCmd) Action (message ChatMessage) (BotResponse, error) {
+func (t NotFoundTestCmd) Action (message slack.ChatMessage) (BotResponse, error) {
 	var r BotResponse
 	return r, nil
 }
@@ -58,7 +59,7 @@ func TestNewBot_nothing_matched(t *testing.T) {
 	commands := []BotCmd{&NotFoundTestCmd{}}
 	b:= NewBot(commands)
 
-	m := ChatMessage{
+	m := slack.ChatMessage{
 		Token: "sometoken",
 		TeamId: "1234",
 		TeamDomain: "test",
