@@ -1,8 +1,9 @@
 language: go
-
 go:
-  - 1.8
-
+- 1.8
 install: make install
 script:
-  - make test
+- make test
+notifications:
+  slack:
+    secure: aaXTRb65+ARXsWXqP7092BrJwUnsM4rQho3gliEt1nIBObpza68V9XtVMOJmZ3GFyexLShoaE2yNBmu9aGVz24JF6HE15Bzk3uWj2zqX2br7zP2Cuav4Ds3nksbv1zF1IsLWBq+dtNX6iEMgndtxtaQkivm34xNOCbqrcJcAqZVDxOFMYGZ/Tl0f9JkI4vgrImpHz7zPrIB+EGQZUNUi+9ra4huBCQaFVf48hjOciYrBKmE/lKyiMwsecC8jsY02rmaMJ1yGjv0G6jReMsy43asA6mL8IEVpqW6LLwo4eNMvJr82izG3W+Sp9xUFRe+Caj1SPQBfj4O3Q4kIiwEEKVz6EBsmQdjHJ6t93qM6DCpvwmGSkjr5kQ2OeCvq+5NVfI+vTWbVnwYqNsF2QC8PoqZvWfPS+BlmNT/kAIO2ceIYfutbohp3BzUENj4Yq+SaA+F8H5gIlI7Tw0z27UgIQRyJxx0R117fBEOLsxFnZkKjhVKvwQ5W4bGcrdxj7Ykx/Ml7cwSEWMxPMhN29nuaLAJwn7LvinvyPcV6GbP8G5y8j8zZQl0cMichBB/a3f2aBvBvOszaO+jiTumltljXbkt5XgjdvR6BGdkM3dZqzvStoSHXZaOdIfacqFgRUjmUoarrTKRj480ar0dcav6lxTNLZHYRb/scqwgDzY4B7H4=
