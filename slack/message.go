@@ -13,3 +13,11 @@ type ChatMessage struct {
 	TriggerWord string `json:"trigger_word"`
 }
 
+
+type BotStatement struct {
+	Text string
+}
+
+func (m ChatMessage) createStatement() BotStatement {
+	return BotStatement{Text: m.Text}
+}
