@@ -11,16 +11,16 @@ list/function:
 	$(APEX) list
 
 deploy:
-	$(APEX) deploy $(target)
+	source .env && $(APEX) deploy $(target)
 
 logs:
-	$(APEX) logs $(target)
+	source .env && $(APEX) logs $(target)
 
 metrics:
-	$(APEX) metrics $(target)
+	source .env && $(APEX) metrics $(target)
 
 run:
-	$(APEX) invoke $(target) < params.json
+	source .env && $(APEX) invoke $(target) < params.json
 
 run/local:
 	cat params.json | go run functions/slackbot/main.go
