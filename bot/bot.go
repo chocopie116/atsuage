@@ -2,6 +2,7 @@ package bot
 
 import (
 	"fmt"
+
 	"github.com/chocopie116/atsuage/slack"
 )
 
@@ -17,19 +18,24 @@ type BotImpl struct {
 	commands [] BotCmd
 }
 
+type BotStatement struct {
+	Text string
+}
+
 type BotResponse struct {
 	Text string
 }
 
 type BotCmd interface {
-	Match(slack.ChatMessage)(bool, error)
-	Action(slack.ChatMessage)(BotResponse, error)
+	Match(BotStatement)(bool, error)
+	Action(BotStatement)(BotResponse, error)
 }
 
 func (b BotImpl) Parse(m slack.ChatMessage) (BotResponse, error){
 	var r BotResponse
+	st := b.createStatement(m)
 	for _, c := range b.commands {
-		matched, err := c.Match(slack.ChatMessage{})
+		matched, err := c.Match(st)
 		if err != nil {
 			return r, err
 		}
@@ -38,7 +44,7 @@ func (b BotImpl) Parse(m slack.ChatMessage) (BotResponse, error){
 			continue
 		}
 
-		r, err := c.Action(m)
+		r, err := c.Action(st)
 		if err != nil {
 			return r, err
 		}
@@ -47,4 +53,8 @@ func (b BotImpl) Parse(m slack.ChatMessage) (BotResponse, error){
 	}
 
 	return r,fmt.Errorf("Nothing BodCmd matched. plz check injected BotCmd")
+}
+
+func (b BotImpl) createStatement(m slack.ChatMessage) BotStatement {
+	return BotStatement{Text: m.Text}
 }

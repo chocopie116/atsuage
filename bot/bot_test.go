@@ -8,11 +8,11 @@ import (
 type TestCmd struct {
 }
 
-func (t TestCmd) Match (message slack.ChatMessage) (bool, error){
+func (t TestCmd) Match (st BotStatement) (bool, error){
 	return true, nil
 }
 
-func (t TestCmd) Action (message slack.ChatMessage) (BotResponse, error) {
+func (t TestCmd) Action (st BotStatement) (BotResponse, error) {
 	return BotResponse{Text: "TestCmd Response text is here"}, nil
 }
 
@@ -46,11 +46,11 @@ func TestNewBot_OK(t *testing.T) {
 type NotFoundTestCmd struct {
 }
 
-func (t NotFoundTestCmd) Match (message slack.ChatMessage) (bool, error){
+func (t NotFoundTestCmd) Match (st BotStatement) (bool, error){
 	return false, nil
 }
 
-func (t NotFoundTestCmd) Action (message slack.ChatMessage) (BotResponse, error) {
+func (t NotFoundTestCmd) Action (st BotStatement) (BotResponse, error) {
 	var r BotResponse
 	return r, nil
 }
