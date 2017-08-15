@@ -6,7 +6,6 @@ import (
 
 	"github.com/apex/go-apex"
 	"github.com/chocopie116/atsuage/bot"
-	"bytes"
 )
 
 type slackMessage struct {
@@ -23,7 +22,7 @@ type slackMessage struct {
 }
 
 type slackResponse struct {
-	Text string `json:"text`
+	Text string `json:"text"`
 }
 
 func main() {
@@ -31,22 +30,21 @@ func main() {
 		log.Printf("original %s\n", event)
 
 		st, err := factoryBotStatement(event)
-
-		b := initialize()
-
-		br, err := b.Parse(st)
-
 		if err != nil {
 			return nil, err
 		}
 
-		//log.Printf("%+v", rs)
-		rs, err := formatSlackResponse(br)
+		b := initialize()
+		br, err := b.Parse(st)
+		if err != nil {
+			return nil, err
+		}
+
+		rs, err := convertSlackResponse(br)
 		if err != nil {
 			return rs, err
 		}
-
-		log.Printf("response %s\n", rs)
+		log.Printf("response %+v\n", rs)
 
 		return rs, nil
 	})
@@ -69,15 +67,6 @@ func factoryBotStatement(event json.RawMessage) (bot.BotStatement, error) {
 	return bot.BotStatement{Text: m.Text}, nil
 }
 
-func formatSlackResponse(br bot.BotResponse) (string, error) {
-	sr := slackResponse{Text: br.Text}
-
-	var buf bytes.Buffer
-	b, err := json.Marshal(sr)
-	if err != nil {
-		return "", err
-	}
-	buf.Write(b)
-
-	return buf.String(), nil
+func convertSlackResponse(br bot.BotResponse) (slackResponse, error) {
+	return slackResponse{Text: br.Text}, nil
 }

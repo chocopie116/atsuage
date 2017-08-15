@@ -14,7 +14,7 @@ deploy:
 	source .env && $(APEX) deploy $(target)
 
 logs:
-	source .env && $(APEX) logs $(target)
+	source .env && $(APEX) logs -f $(target)
 
 metrics:
 	source .env && $(APEX) metrics $(target)
