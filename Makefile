@@ -10,9 +10,11 @@ install: setup
 test: $(RICHGO)
 	$(RICHGO) test -v $$(go list ./... | grep -v /vendor/)
 
-
-test/watch: $(REFLEX)
+watch/test: $(REFLEX)
 	$(REFLEX) --regex='\.go$$' --inverse-regex='vendor/*' -- $(MAKE) test
+
+watch/run/local: $(REFLEX)
+	$(REFLEX) --regex='\.go$$' --inverse-regex='vendor/*' -- $(MAKE) -C apex run/local
 
 $(REFLEX):
 	go get -u github.com/cespare/reflex

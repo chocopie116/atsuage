@@ -2,8 +2,6 @@ package bot
 
 import (
 	"testing"
-
-	"github.com/chocopie116/atsuage/slack"
 )
 
 type TestCmd struct {
@@ -21,19 +19,8 @@ func TestNewBot_OK(t *testing.T) {
 	commands := []BotCmd{&TestCmd{}}
 	b:= NewBot(commands)
 
-	m := slack.ChatMessage{
-		Token: "sometoken",
-		TeamId: "1234",
-		TeamDomain: "test",
-		ChannelId: "1234",
-		ChannelName: "general",
-		Timestamp: "123456",
-		UserId: "123",
-		UserName: "chocopie116",
-		Text: "atsuage",
-		TriggerWord: "command",
-	}
-	r, err := b.Parse(m)
+	st := BotStatement{Text: "atsuage"}
+	r, err := b.Parse(st)
 
 	if err != nil {
 		t.Errorf("want nil but got %+v", err)
@@ -60,19 +47,8 @@ func TestNewBot_nothing_matched(t *testing.T) {
 	commands := []BotCmd{&NotFoundTestCmd{}}
 	b:= NewBot(commands)
 
-	m := slack.ChatMessage{
-		Token: "sometoken",
-		TeamId: "1234",
-		TeamDomain: "test",
-		ChannelId: "1234",
-		ChannelName: "general",
-		Timestamp: "123456",
-		UserId: "123",
-		UserName: "chocopie116",
-		Text: "atsuage",
-		TriggerWord: "command",
-	}
-	_, err := b.Parse(m)
+	st := BotStatement{Text: "atsuage"}
+	_, err := b.Parse(st)
 
 	if err == nil {
 		t.Error("must return err but got nil")
