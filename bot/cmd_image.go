@@ -2,9 +2,12 @@ package bot
 
 import (
 	"strings"
+
+	"github.com/chocopie116/atsuage/google"
 )
 
 type ImageCmd struct {
+	GoogleClient google.GoogleImageClient
 }
 
 func (i ImageCmd) Match(st BotStatement) (bool){
