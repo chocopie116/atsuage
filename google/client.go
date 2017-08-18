@@ -1,10 +1,10 @@
 package google
 
 import (
-	"fmt"
-	"os"
-	"net/http"
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
 )
 
 type GoogleImageClient struct {

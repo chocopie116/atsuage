@@ -1,9 +1,10 @@
 package google
 
 import (
-	"testing"
 	"log"
+	"testing"
 )
+
 func TestSearchQuery(t *testing.T) {
 	g := GoogleImageClient{}
 	//TODO API requestをmockしてもよさそう?
