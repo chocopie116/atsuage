@@ -1,6 +1,8 @@
 package bot
 
-import "strings"
+import (
+	"strings"
+)
 
 type ImageCmd struct {
 }

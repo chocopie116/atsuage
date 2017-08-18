@@ -33,3 +33,4 @@ func TestMatch_Ng_Need_Space_Between_Options(t *testing.T) {
 		t.Errorf("want false but got %+v", is)
 	}
 }
+
