@@ -6,6 +6,7 @@ import (
 )
 func TestSearchQuery(t *testing.T) {
 	g := GoogleImageClient{}
+	//TODO API requestをmockしてもよさそう?
 	r, err := g.Search("Test")
 	if err != nil {
 		t.Errorf("want nil but got %+v", err)
