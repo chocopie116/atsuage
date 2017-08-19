@@ -7,10 +7,22 @@ import (
 	"os"
 )
 
-type GoogleImageClient struct {
+type ImageClient interface {
+	Search(string) (*ImageResponse, error)
 }
 
-type GoogleImageSearchResponse struct {
+type googleCustomSearchApiResponse struct {
+	//TODO Error区別したい
+	//Error struct {
+	//	Code   int `json:"code"`
+	//	Errors []struct {
+	//		Domain       string `json:"domain"`
+	//		ExtendedHelp string `json:"extendedHelp"`
+	//		Message      string `json:"message"`
+	//		Reason       string `json:"reason"`
+	//	} `json:"errors"`
+	//	Message string `json:"message"`
+	//} `json:"error"`
 	Items []struct {
 		Pagemap          struct {
 			CseThumbnail []struct {
@@ -20,7 +32,22 @@ type GoogleImageSearchResponse struct {
 	} `json:"items"`
 }
 
-func (c GoogleImageClient) Search(q string) (*GoogleImageSearchResponse, error) {
+type ImageResponse struct {
+	Url string
+}
+
+func (r *ImageResponse) IsEmpty() (bool){
+	return r.Url == ""
+}
+
+func (r *ImageResponse) FetchImageUrl() (string) {
+	return r.Url
+}
+
+type ImageClientImpl struct {
+}
+
+func (c *ImageClientImpl) Search(q string) (*ImageResponse, error) {
 	u := fmt.Sprintf("https://www.googleapis.com/customsearch/v1?key=%s&cx=%s&q=%s",
 		os.Getenv("GOOGLE_IMAGE_API_KEY"),
 		os.Getenv("GOOGLE_IMAGE_SEARCH_ENGINE_ID"),
@@ -31,19 +58,19 @@ func (c GoogleImageClient) Search(q string) (*GoogleImageSearchResponse, error) 
 		return nil, err
 	}
 	defer res.Body.Close()
-	var r GoogleImageSearchResponse
-	if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+	var gr googleCustomSearchApiResponse
+	if err := json.NewDecoder(res.Body).Decode(&gr); err != nil {
 		return nil, err
 	}
 
-	return &r, nil
-}
+	//TODO API RateLimitの時と検索結果が0件の時を区別したい
+	if len(gr.Items) == 0 {
+		return &ImageResponse{}, nil
+	}
 
-func (r GoogleImageSearchResponse) IsEmpty() (bool){
-	return len(r.Items) == 0
-}
+	var ir ImageResponse
+	//TODO 雑に検索結果のうちの10件を全部代入してランダムに1件選ぶようにしたい
+	ir.Url = gr.Items[0].Pagemap.CseThumbnail[0].Src
 
-func (r GoogleImageSearchResponse) fetchImageSrc() (string) {
-	return r.Items[0].Pagemap.CseThumbnail[0].Src
+	return &ir, nil
 }
-
