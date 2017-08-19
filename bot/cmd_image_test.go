@@ -2,9 +2,8 @@ package bot
 
 import (
 	"testing"
+
 	"github.com/chocopie116/atsuage/google"
-	"encoding/json"
-	"log"
 )
 
 func TestMatch_Ok(t *testing.T) {
@@ -37,25 +36,24 @@ func TestMatch_Ng_Need_Space_Between_Options(t *testing.T) {
 	}
 }
 
-type MockGoogleImageClient struct {
+type MockImageClient struct {
 }
 
-func(m MockGoogleImageClient) Search (q string) (*google.GoogleImageSearchResponse, error) {
-	b := []byte("{ 'items': [ { 'pagemap': { 'cse_thumbnail': [ { 'src': 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSEnXvseTrR-L9bKZpR6P5SKP76QCVreYou4goWjqbZQpPXmivc_i5YidE'} ] } }]}")
-	var g google.GoogleImageSearchResponse
-	json.Unmarshal(b, &g)
-	log.Print(g)
-
-	return &g, nil
+func(m MockImageClient) Search (q string) (*google.ImageResponse, error) {
+	return &google.ImageResponse{Url: "https://example.com/static/img/test.png"}, nil
 }
 
 func TestMatch_Ok_SearchQuery(t *testing.T) {
-	c := ImageCmd{google.GoogleImageClient{}}
+	c := ImageCmd{MockImageClient{}}
 	st := BotStatement{Text: "jpi majide"}
-	_, err := c.Action(st)
+	r, err := c.Action(st)
 
 	if err!= nil {
 		t.Errorf("want nil but got %+v", err)
+	}
+
+	if r.Text != "https://example.com/static/img/test.png" {
+		t.Errorf("want img url but got %+v", r.Text)
 	}
 }
 

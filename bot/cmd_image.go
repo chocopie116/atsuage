@@ -7,14 +7,19 @@ import (
 )
 
 type ImageCmd struct {
-	GoogleClient google.GoogleImageClient
+	Client google.ImageClient
 }
 
 func (i ImageCmd) Match(st BotStatement) (bool){
 	return strings.HasPrefix(st.Text, "jpi ")
 }
 
-func (i ImageCmd) Action(st BotStatement) (BotResponse, error) {
-	return BotResponse{Text: st.Text}, nil
-}
+func (i ImageCmd) Action(st BotStatement) (*BotResponse, error) {
+	ir, err := i.Client.Search(st.Text)
 
+	if err != nil {
+		return nil, err
+	}
+
+	return &BotResponse{Text: ir.FetchImageUrl()}, nil
+}
