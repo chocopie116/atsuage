@@ -1,8 +1,8 @@
 package main
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 	"strings"
 
 	"github.com/apex/go-apex"
@@ -10,15 +10,15 @@ import (
 )
 
 type slackMessage struct {
-	Token string `json:"token"`
-	TeamId string `json:"team_id"`
-	TeamDomain string `json:"team_domain"`
-	ChannelId string `json:"channel_id"`
+	Token       string `json:"token"`
+	TeamId      string `json:"team_id"`
+	TeamDomain  string `json:"team_domain"`
+	ChannelId   string `json:"channel_id"`
 	ChannelName string `json:"channel_name"`
-	Timestamp string `json:"timestamp"`
-	UserId string `json:"user_id"`
-	UserName string `json:"user_name"`
-	Text string `json:"text"`
+	Timestamp   string `json:"timestamp"`
+	UserId      string `json:"user_id"`
+	UserName    string `json:"user_name"`
+	Text        string `json:"text"`
 	TriggerWord string `json:"trigger_word"`
 }
 
@@ -29,6 +29,7 @@ type slackResponse struct {
 func main() {
 	apex.HandleFunc(func(event json.RawMessage, ctx *apex.Context) (interface{}, error) {
 		log.Printf("original %s\n", event)
+
 
 		st, err := factoryBotStatement(event)
 		if err != nil {
