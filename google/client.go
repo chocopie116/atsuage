@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/k0kubun/pp"
 )
 
 type ImageClient interface {
@@ -17,7 +19,7 @@ type googleCustomSearchApiResponse struct {
 	//	Code   int `json:"code"`
 	//	Errors []struct {
 	//		Domain       string `json:"domain"`
-	//		ExtendedHelp string `json:"extendedHelp"`
+	// 		ExtendedHelp string `json:"extendedHelp"`
 	//		Message      string `json:"message"`
 	//		Reason       string `json:"reason"`
 	//	} `json:"errors"`
@@ -67,6 +69,8 @@ func (c *ImageClientImpl) Search(q string) (*ImageResponse, error) {
 	if len(gr.Items) == 0 {
 		return &ImageResponse{}, nil
 	}
+
+	pp.Print(gr.Items)
 
 	var ir ImageResponse
 	//TODO 雑に検索結果のうちの10件を全部代入してランダムに1件選ぶようにしたい

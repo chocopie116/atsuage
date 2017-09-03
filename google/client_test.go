@@ -8,7 +8,7 @@ func TestSearchQuery(t *testing.T) {
 	//TODO API requestをmockしてもよさそう?(google Custom Search API は100request/1dayで厳しい)
 
 	//g := ImageClientImpl{}
-	//r, err := g.Search("Test")
+	//r, err := g.Search("sushi")
 	//if err != nil {
 	//	t.Errorf("want nil but got %+v", err)
 	//}
